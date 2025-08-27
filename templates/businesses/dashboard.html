@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ReviewAI – My Businesses</title>
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- SIDEBAR -->
+    {% include 'businesses/sidebar.html' %}
+    
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- Top Navbar -->
+      <div class="top-navbar">
+        <div class="navbar-left">
+          <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div class="greeting">Hey, {{ user.username }}</div>
+        </div>
+        <div class="profile-picture">
+          <img src="{% static 'images/Profile-sample.png' %}" alt="Profile">
+        </div>
+      </div>
+
+      <div class="page-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+          <div class="header-left">
+            <h1>My Businesses</h1>
+            <p class="header-subtitle">Manage your business profiles and review pages</p>
+          </div>
+          <div class="header-actions">
+            <a href="{% url 'businesses:create_business' %}" class="btn btn-primary">
+              + Add Business
+            </a>
+          </div>
+        </header>
+
+        <!-- Grid View -->
+        <section class="business-grid">
+          {% for business in businesses %}
+            <div class="business-card" data-url="{% url 'businesses:business_detail' id=business.id %}" onclick="window.location.href=this.dataset.url">
+              <div class="card-header">
+                <div class="business-info">
+                  <h3>{{ business.name }}</h3>
+                  <p class="address">{{ business.address }}</p>
+                </div>
+                <span class="status-badge">Active</span>
+              </div>
+              <div class="card-stats">
+                <div class="stat">
+                  <span class="stat-value">4.8</span>
+                  <span class="stat-label">Avg Rating</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">127</span>
+                  <span class="stat-label">Reviews</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">89%</span>
+                  <span class="stat-label">Response</span>
+                </div>
+              </div>
+              <div class="business-actions" onclick="event.stopPropagation()">
+                <a href="{{ business.review_link.get_absolute_url }}" target="_blank" class="btn btn-outline">
+                  View Form
+                </a>
+                <a href="{% url 'businesses:create_qr_code' token=business.review_link.token %}" class="btn btn-outline">
+                  Create QR Code
+                </a>
+              </div>
+            </div>
+          {% empty %}
+            <div class="empty-state">
+              <div class="empty-icon">🏢</div>
+              <h3>No businesses yet</h3>
+              <p>Start by adding your first business to begin collecting reviews</p>
+              <a href="{% url 'businesses:create_business' %}" class="btn btn-secondary">
+                Add Your First Business
+              </a>
+            </div>
+          {% endfor %}
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.querySelector('.sidebar');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    
+    mobileMenuBtn.addEventListener('click', function() {
+      sidebar.classList.toggle('open');
+      mobileOverlay.classList.toggle('active');
+      this.classList.toggle('active');
+    });
+    
+    mobileOverlay.addEventListener('click', function() {
+      sidebar.classList.remove('open');
+      mobileOverlay.classList.remove('active');
+      mobileMenuBtn.classList.remove('active');
+    });
+  </script>
+</body>
+</html>
