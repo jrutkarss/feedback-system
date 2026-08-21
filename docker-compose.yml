@@ -15,6 +15,7 @@ services:
     build: .
     container_name: quickrate_web
     command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py migrate
     env_file:
       - .env
     volumes:
