@@ -22,9 +22,11 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 # Copy project files
 COPY . /app/
+RUN python3 manage.py makemigrations && python3 manage.py migrate
 
 # Collect static files for WhiteNoise
 RUN python manage.py collectstatic --noinput
+
 # migrate the database 
 
 # Expose the application port
