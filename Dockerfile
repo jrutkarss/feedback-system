@@ -26,7 +26,7 @@ COPY . /app/
 # Collect static files for WhiteNoise
 RUN python manage.py collectstatic --noinput
 RUN docker compose exec web python manage.py makemigrations
-docker compose exec web python manage.py migrate
+RUN docker compose exec web python manage.py migrate
 
 # migrate the database 
 
