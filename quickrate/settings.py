@@ -23,6 +23,7 @@ DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    'quickrate.onrender.com',
 ]
 
 # Application definition
