@@ -7,9 +7,25 @@ on:
   workflow_dispatch:
 
 jobs:
+  grafana-dash:
+    runs-on: ubuntu-latest  # Added the missing runs-on key
+    steps:
+      - name: Install Grafana Alloy
+        run: |
+          /bin/sh -c "$(curl -fsSL https://storage.googleapis.com/cloud-onboarding/alloy/scripts/install-linux.sh)"
+        env:
+          GCLOUD_HOSTED_METRICS_ID: "2676831"
+          GCLOUD_HOSTED_METRICS_URL: "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom/push"
+          GCLOUD_HOSTED_LOGS_ID: "1334092"
+          GCLOUD_HOSTED_LOGS_URL: "https://logs-prod-028.grafana.net/loki/api/v1/push"
+          GCLOUD_FM_URL: "https://fleet-management-prod-018.grafana.net"
+          GCLOUD_FM_POLL_FREQUENCY: "60s"
+          GCLOUD_FM_HOSTED_ID: "1376298"
+          ARCH: "amd64"
+          GCLOUD_RW_API_KEY: ${{ secrets.GRAFANA_API_KEY }}  # Securely referenced
+
   build-and-push:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out the code
         uses: actions/checkout@v4
